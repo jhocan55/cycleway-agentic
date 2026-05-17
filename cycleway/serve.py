@@ -12,7 +12,22 @@ class NoCacheHandler(SimpleHTTPRequestHandler):
     def log_message(self, fmt, *args):
         pass  # suppress per-request noise
 
+import socket
+
+def _lan_ip():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return 'unknown'
+
 port = int(sys.argv[1]) if len(sys.argv) > 1 else 8080
-print(f'CycleWay running at http://localhost:{port}/')
+lan  = _lan_ip()
+print(f'CycleWay running at:')
+print(f'  Local   → http://localhost:{port}/')
+print(f'  Network → http://{lan}:{port}/   ← open this on your phone')
 print('Press Ctrl+C to stop.')
 HTTPServer(('', port), NoCacheHandler).serve_forever()

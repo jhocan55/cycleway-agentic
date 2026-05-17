@@ -2,9 +2,10 @@
 // Demonstrates multi-agent pattern: app.js (orchestrator) spawns this in parallel
 // with the main AI advisor, each with its own system prompt and purpose.
 
-const LITELLM_URL  = 'http://localhost:4000/v1/chat/completions';
+const _HOST        = window.location.hostname;
+const LITELLM_URL  = `http://${_HOST}:4000/v1/chat/completions`;
 const LITELLM_KEY  = 'cycleway-dev-key';
-const OLLAMA_URL   = 'http://localhost:11434/v1/chat/completions';
+const OLLAMA_URL   = 'http://localhost:11434/v1/chat/completions'; // local-only fallback
 
 const SYSTEM_PROMPT = `You are a cycling safety analyst. Reply in EXACTLY this format — no other text:
 VERDICT: [SAFE|CAUTION|HIGH RISK]
@@ -12,7 +13,7 @@ REASON: [one sentence, max 20 words explaining the main risk or why it is safe]`
 
 async function _endpoint() {
   try {
-    const r = await fetch('http://localhost:4000/health', { signal: AbortSignal.timeout(1500) });
+    const r = await fetch(`http://${_HOST}:4000/health`, { signal: AbortSignal.timeout(1500) });
     if (r.ok || r.status === 401) return { url: LITELLM_URL, model: 'local/llama3.2', key: LITELLM_KEY };
   } catch { /* connection refused or timeout */ }
   return { url: OLLAMA_URL, model: 'llama3.2:1b', key: '' };

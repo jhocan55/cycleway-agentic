@@ -1,9 +1,11 @@
 // Cycling advisor — routes through LiteLLM proxy (falls back to Ollama directly)
 // LiteLLM: http://localhost:4000  →  Ollama (local) or GitHub Models (free)
 
-const LITELLM_URL  = 'http://localhost:4000/v1/chat/completions';
+// Use the page's own hostname so physical phones on the LAN reach the right host
+const _HOST        = window.location.hostname;
+const LITELLM_URL  = `http://${_HOST}:4000/v1/chat/completions`;
 const LITELLM_KEY  = 'cycleway-dev-key';
-const OLLAMA_URL   = 'http://localhost:11434/v1/chat/completions';
+const OLLAMA_URL   = 'http://localhost:11434/v1/chat/completions'; // local-only fallback
 
 // Model registry — maps chip data-model values to LiteLLM model names
 const MODELS = {
@@ -21,7 +23,7 @@ export function setModel(key) {
 async function _resolveEndpoint() {
   const m = MODELS[_selectedModel] || MODELS['local'];
   try {
-    const r = await fetch('http://localhost:4000/health', { signal: AbortSignal.timeout(1500) });
+    const r = await fetch(`http://${_HOST}:4000/health`, { signal: AbortSignal.timeout(1500) });
     // 401 = auth required but proxy IS running — actual calls include the Bearer key
     if (r.ok || r.status === 401) return { url: LITELLM_URL, model: m.litellm, key: LITELLM_KEY, via: 'LiteLLM', label: m.label };
   } catch { /* connection refused or timeout — proxy is down */ }
