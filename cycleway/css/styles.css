@@ -97,10 +97,10 @@ body {
     border-bottom: 1px solid var(--rule);
   }
 
-  /* Map: fixed height below the panel instead of filling the viewport */
-  .map-col  { position: sticky; bottom: 0; z-index: 5; }
-  .map-wrap { min-height: 300px; height: 52vw; max-height: 400px; }
-  #map      { min-height: 300px; height: 100%; }
+  /* Map: fixed height below the panel, natural flow (no sticky — avoid Leaflet conflicts) */
+  .map-col  { position: relative; z-index: 5; }
+  .map-wrap { min-height: 340px; height: 56vw; max-height: 420px; }
+  #map      { min-height: 340px; height: 100%; }
 
   /* Toast: smaller and full-width on mobile */
   .toast { left: 12px; right: 12px; bottom: 12px; max-width: none; font-size: 12px; }
