@@ -15,7 +15,7 @@ model_list:
 
   - model_name: github/llama-3.3-70b
     litellm_params:
-      model: openai/meta-llama-3.3-70b-instruct
+      model: openai/Llama-3.3-70B-Instruct
       api_base: https://models.inference.ai.azure.com
       api_key: os.environ/GITHUB_TOKEN
 

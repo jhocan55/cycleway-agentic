@@ -4,15 +4,29 @@
 const LITELLM_URL  = 'http://localhost:4000/v1/chat/completions';
 const LITELLM_KEY  = 'cycleway-dev-key';
 const OLLAMA_URL   = 'http://localhost:11434/v1/chat/completions';
-const MODEL        = 'local/llama3.2';   // LiteLLM model name (see litellm-config.yaml)
-const MODEL_DIRECT = 'llama3.2:1b';     // Direct Ollama fallback
+
+// Model registry — maps chip data-model values to LiteLLM model names
+const MODELS = {
+  'local':             { litellm: 'local/llama3.2',      ollama: 'llama3.2:1b', label: 'llama3.2' },
+  'github/gpt-4o-mini':  { litellm: 'github/gpt-4o-mini',  ollama: null,          label: 'gpt-4o-mini' },
+  'github/llama-3.3-70b': { litellm: 'github/llama-3.3-70b', ollama: null,         label: 'llama-3.3-70b' }
+};
+
+let _selectedModel = 'local';
+
+export function setModel(key) {
+  _selectedModel = key;
+}
 
 async function _resolveEndpoint() {
+  const m = MODELS[_selectedModel] || MODELS['local'];
   try {
     const r = await fetch('http://localhost:4000/health', { signal: AbortSignal.timeout(1000) });
-    if (r.ok) return { url: LITELLM_URL, model: MODEL, key: LITELLM_KEY, via: 'LiteLLM' };
+    if (r.ok) return { url: LITELLM_URL, model: m.litellm, key: LITELLM_KEY, via: 'LiteLLM', label: m.label };
   } catch { /* fall through */ }
-  return { url: OLLAMA_URL, model: MODEL_DIRECT, key: '', via: 'Ollama' };
+  // GitHub Models require LiteLLM proxy — fall back to local Ollama if proxy is down
+  const fallbackModel = m.ollama || MODELS['local'].ollama;
+  return { url: OLLAMA_URL, model: fallbackModel, key: '', via: 'Ollama', label: 'llama3.2' };
 }
 
 let systemPrompt = _basePrompt();
@@ -74,6 +88,17 @@ export function initAssistant() {
   document.querySelectorAll('.ai-chip').forEach(chip => {
     chip.addEventListener('click', () => _send(chip.dataset.msg));
   });
+
+  // Model switcher chips
+  document.querySelectorAll('.model-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.model-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      setModel(chip.dataset.model);
+      chatHistory = [];
+      _resetLog();
+    });
+  });
 }
 
 // ── Guardrails ─────────────────────────────────────────────────────────────────
@@ -128,8 +153,8 @@ async function _send(userMsg) {
 }
 
 async function* _stream(messages) {
-  const { url, model, key, via } = await _resolveEndpoint();
-  _updateBadge(via);
+  const { url, model, key, via, label } = await _resolveEndpoint();
+  _updateBadge(via, label);
 
   const headers = { 'Content-Type': 'application/json' };
   if (key) headers['Authorization'] = `Bearer ${key}`;
@@ -182,9 +207,9 @@ function _appendMsg(role, text) {
   return div;
 }
 
-function _updateBadge(via) {
+function _updateBadge(via, label) {
   const badge = document.querySelector('.ai-badge');
-  if (badge) badge.textContent = `🤖 ${via} · llama3.2`;
+  if (badge) badge.textContent = `🤖 ${via} · ${label}`;
 }
 
 function _resetLog() {
