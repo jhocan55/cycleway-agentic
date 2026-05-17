@@ -32,16 +32,39 @@ services:
       LANGFUSE_ENABLE_EXPERIMENTAL_FEATURES: "true"
       TELEMETRY_ENABLED: "false"
 
+  # ── LiteLLM DB — enables the /ui dashboard ────────────────────────────────
+  litellm-db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: litellm
+      POSTGRES_PASSWORD: litellm
+      POSTGRES_DB: litellm
+    volumes:
+      - litellm-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U litellm"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   # ── LiteLLM — unified LLM proxy (Ollama + GitHub Models) ──────────────────
   # network_mode: host lets LiteLLM reach Ollama on localhost:11434
   litellm:
     image: ghcr.io/berriai/litellm:main-latest
     restart: unless-stopped
     network_mode: host
+    depends_on:
+      litellm-db:
+        condition: service_healthy
     volumes:
       - ./litellm-config.yaml:/app/config.yaml
     command: --config /app/config.yaml --port 4000 --detailed_debug
     environment:
+      # Database for /ui dashboard
+      DATABASE_URL: postgresql://litellm:litellm@localhost:5433/litellm
       # Langfuse connection for tracing (localhost because host network)
       LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-placeholder}
       LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-placeholder}
@@ -51,3 +74,4 @@ services:
 
 volumes:
   langfuse-db:
+  litellm-db:
