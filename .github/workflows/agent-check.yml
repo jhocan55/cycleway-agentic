@@ -1,0 +1,34 @@
+name: Agentic Stack Health Check
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 * * 1'  # Every Monday at 8am
+
+jobs:
+  check-stack:
+    name: Verify agentic tool versions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check LiteLLM latest version
+        run: |
+          LATEST=$(curl -s https://api.github.com/repos/BerriAI/litellm/releases/latest | python3 -c "import sys,json; print(json.load(sys.stdin)['tag_name'])")
+          echo "LiteLLM latest: $LATEST"
+          grep "$LATEST" docker-compose.yml && echo "✅ Up to date" || echo "⚠️  Consider updating LiteLLM in docker-compose.yml"
+
+      - name: Check Langfuse latest version
+        run: |
+          LATEST=$(curl -s https://api.github.com/repos/langfuse/langfuse/releases/latest | python3 -c "import sys,json; print(json.load(sys.stdin)['tag_name'])")
+          echo "Langfuse latest: $LATEST"
+
+      - name: Validate spec-kit constitution
+        run: |
+          python3 -c "
+          with open('.specify/memory/constitution.md') as f:
+              content = f.read()
+          assert 'Version' in content, 'Constitution missing version'
+          assert 'Ratified' in content, 'Constitution missing ratification date'
+          print('✅ Constitution is valid')
+          "

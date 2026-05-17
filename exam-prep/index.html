@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Agentic AI Cert — Exam Prep</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,800&family=Figtree:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-brand">🎓 GH Agentic AI <span>/ Exam Prep</span></div>
+  <div class="nav-badge">AGENTIC</div>
+</nav>
+
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="study">💬 AI Study Assistant</button>
+  <button class="tab-btn" data-tab="quiz">📝 Domain Quiz</button>
+  <button class="tab-btn" data-tab="progress">📊 Progress</button>
+  <button class="tab-btn" data-tab="patterns">🔧 Agentic Patterns</button>
+</div>
+
+<!-- ═══ STUDY ASSISTANT TAB ═══ -->
+<div class="tab-content active" id="tab-study">
+  <div class="main">
+    <div id="ollama-status" class="ollama-status">Checking Ollama…</div>
+    <div class="study-layout">
+      <div class="chat-panel">
+        <div class="chat-panel-header">
+          🤖 Ask anything about the certification
+        </div>
+        <div id="chat-log">
+          <div class="chat-msg assistant">Hi! I'm your GitHub Agentic AI Developer exam tutor powered by Ollama (llama3.2 — running locally, 100% free).
+
+Ask me anything about the exam domains:
+• Responsible AI &amp; agentic safety
+• GitHub Copilot Agent Mode, Edit Mode, MCP
+• Tool use &amp; orchestration patterns
+• Prompt engineering for agents
+• GitHub Models (free inference API)
+• Privacy, content exclusions, org policies
+
+Type a question or click a prompt below ↓</div>
+        </div>
+        <form id="chat-form" class="chat-form-wrap">
+          <input id="chat-input" type="text" placeholder="Ask about the exam…" autocomplete="off"/>
+          <button type="submit" class="chat-send-btn">↑</button>
+        </form>
+      </div>
+
+      <div class="sidebar-panel">
+        <div class="sidebar-card">
+          <h3>Quick prompts</h3>
+          <button class="prompt-chip">What is Agent Mode in GitHub Copilot?</button>
+          <button class="prompt-chip">Explain MCP (Model Context Protocol) and its 3 primitives</button>
+          <button class="prompt-chip">What is the difference between zero-shot and few-shot prompting?</button>
+          <button class="prompt-chip">What are Sub-Agents and when should I use them?</button>
+          <button class="prompt-chip">How does Copilot handle my code for privacy?</button>
+          <button class="prompt-chip">What does "human-in-the-loop" mean for agents?</button>
+          <button class="prompt-chip">What are the risks of AI-generated code?</button>
+          <button class="prompt-chip">What is duplication detection in Copilot?</button>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Exam info</h3>
+          <div style="font-size:12px;color:var(--ink-mid);line-height:1.7">
+            <div>📋 GitHub Certified</div>
+            <div style="font-weight:700;margin-bottom:4px">Agentic AI Developer</div>
+            <div>Pass mark: <strong>70%</strong></div>
+            <div>Duration: <strong>~100 min</strong></div>
+            <div style="margin-top:8px;color:var(--ink-soft)">
+              This tutor uses <strong>llama3.2:1b</strong> via Ollama — runs offline, no API key needed.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ QUIZ TAB ═══ -->
+<div class="tab-content" id="tab-quiz">
+  <div class="main">
+    <div id="quiz-area"></div>
+  </div>
+</div>
+
+<!-- ═══ PROGRESS TAB ═══ -->
+<div class="tab-content" id="tab-progress">
+  <div class="main">
+    <div id="progress-content"></div>
+  </div>
+</div>
+
+<!-- ═══ PATTERNS TAB ═══ -->
+<div class="tab-content" id="tab-patterns">
+  <div class="main">
+    <div id="patterns-content"></div>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
