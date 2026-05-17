@@ -59,8 +59,6 @@ Answer questions about this specific route and conditions. Be direct and actiona
   document.getElementById('aiBlock').style.display = 'block';
 }
 
-// ── Chat ───────────────────────────────────────────────────────────────────────
-
 export function initAssistant() {
   const form  = document.getElementById('ai-form');
   const input = document.getElementById('ai-input');
@@ -78,7 +76,30 @@ export function initAssistant() {
   });
 }
 
+// ── Guardrails ─────────────────────────────────────────────────────────────────
+
+const _BLOCKED = [
+  /ignore (previous|all|your) (instructions?|prompt|rules)/i,
+  /you are now|pretend (you are|to be)|roleplay as/i,
+  /jailbreak|dan mode|developer mode/i,
+  /forget (you are|your instructions?|everything)/i,
+];
+
+function _guardrail(msg) {
+  if (!msg.trim()) return 'Please type a message.';
+  if (msg.length > 500) return 'Message too long — please keep questions under 500 characters.';
+  for (const re of _BLOCKED) {
+    if (re.test(msg)) return 'I can only answer questions about your current cycling route and conditions.';
+  }
+  return null;
+}
+
+// ── Chat ───────────────────────────────────────────────────────────────────────
+
 async function _send(userMsg) {
+  const blocked = _guardrail(userMsg);
+  if (blocked) { _appendMsg('ai', `⚠️ ${blocked}`); return; }
+
   chatHistory.push({ role: 'user', content: userMsg });
   _appendMsg('user', userMsg);
 

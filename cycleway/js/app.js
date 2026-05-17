@@ -3,8 +3,9 @@ import { getBikeRoute, getCarRoute }  from './routing.js';
 import { getWeather }                 from './weather.js';
 import { getTrafficFlow }             from './traffic.js';
 import { initMap, renderMapRoute }    from './map.js';
-import { toast, setBusy, renderWeather, renderRoute } from './ui.js';
+import { toast, setBusy, renderWeather, renderRoute, renderSafetyBriefing, confirmHighRisk } from './ui.js';
 import { initAssistant, setContext }  from './assistant.js';
+import { analyzeRouteSafety }         from './safety-agent.js';
 
 // ── Preference state ───────────────────────────────────────────────────────────
 const prefs = {
@@ -67,8 +68,24 @@ async function findRoute() {
     renderWeather(wx);
     renderRoute(bike, car, traffic, from, to, prefs);
     renderMapRoute(from, to, bike, car, prefs);
-    setContext(bike, wx, traffic, from, to);
 
+    // ── Safety Analysis Agent (sub-agent, runs in parallel with UI render) ──
+    toast('🛡️ Safety agent analysing conditions…');
+    const safety = await analyzeRouteSafety(bike, wx, traffic, from, to);
+    renderSafetyBriefing(safety);
+
+    // ── Human-in-the-loop: require confirmation for HIGH RISK routes ─────────
+    if (safety?.verdict === 'HIGH RISK') {
+      setBusy(false);
+      const proceed = await confirmHighRisk(safety.reason);
+      if (!proceed) {
+        toast('Route cancelled — check conditions before riding.', 'err');
+        return;
+      }
+      setBusy(true);
+    }
+
+    setContext(bike, wx, traffic, from, to);
     toast('✅ Route ready — happy cycling!', 'ok');
   } catch (err) {
     toast(`❌ ${err.message}`, 'err');

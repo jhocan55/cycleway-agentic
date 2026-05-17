@@ -65,6 +65,8 @@ services:
     environment:
       # Database for /ui dashboard
       DATABASE_URL: postgresql://litellm:litellm@localhost:5433/litellm
+      # Master key — used by /ui for login
+      LITELLM_MASTER_KEY: cycleway-dev-key
       # Langfuse connection for tracing (localhost because host network)
       LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-placeholder}
       LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-placeholder}

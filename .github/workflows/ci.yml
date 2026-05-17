@@ -22,7 +22,7 @@ jobs:
 
       - name: Check JS modules exist
         run: |
-          for f in config utils geocoding routing weather traffic scoring map ui app assistant; do
+          for f in config utils geocoding routing weather traffic scoring map ui app assistant safety-agent; do
             [ -f "cycleway/js/$f.js" ] && echo "✅ $f.js" || (echo "❌ Missing $f.js" && exit 1)
           done
 

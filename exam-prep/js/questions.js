@@ -1,693 +1,485 @@
-// GH-300 GitHub Copilot Certification — Exam Question Bank
-// Based on the official study guide (updated January 2026)
+// GitHub Certified Agentic AI Developer — Exam Question Bank
+// Aligned to the AGENTIC certification study guide
 
 export const DOMAINS = {
-  'responsible-ai': {
-    title: 'Responsible AI',
-    weight: '15–20%',
-    icon: '⚖️',
-    color: '#c0392b',
-    description: 'Risks, ethics, responsible use, validation of AI output'
+  'agentic-fundamentals': {
+    title: 'Agentic AI Fundamentals',
+    weight: '25–30%',
+    icon: '🧠',
+    color: '#1a6bb4',
+    description: 'Agent patterns, orchestration, tool use, ReAct loops, multi-agent systems'
   },
-  'copilot-features': {
-    title: 'Copilot Features',
+  'copilot-agentic': {
+    title: 'Copilot Agentic Features',
     weight: '25–30%',
     icon: '🤖',
-    color: '#1a6bb4',
-    description: 'IDE, CLI, Agent Mode, Edit Mode, MCP, Sub-Agents, Spaces, Spark'
-  },
-  'data-architecture': {
-    title: 'Data & Architecture',
-    weight: '10–15%',
-    icon: '🏗️',
     color: '#6d28d9',
-    description: 'Data flow, prompt building, proxy filtering, LLM lifecycle'
+    description: 'Agent Mode, Edit Mode, Copilot Extensions, GitHub Models, Spaces, Spark'
   },
-  'prompt-engineering': {
-    title: 'Prompt Engineering',
-    weight: '10–15%',
-    icon: '✍️',
-    color: '#c47a00',
-    description: 'Prompt structure, context crafting, zero-shot, few-shot, best practices'
-  },
-  'developer-productivity': {
-    title: 'Developer Productivity',
-    weight: '10–15%',
-    icon: '⚡',
+  'mcp-tools': {
+    title: 'MCP & Tool Integration',
+    weight: '15–20%',
+    icon: '🔌',
     color: '#2d5a3d',
-    description: 'Code gen, refactoring, docs, testing, security improvements'
+    description: 'Model Context Protocol, tool definitions, MCP servers, function calling'
   },
-  'privacy-safeguards': {
-    title: 'Privacy & Safeguards',
+  'building-agents': {
+    title: 'Building Agentic Apps',
+    weight: '15–20%',
+    icon: '🏗️',
+    color: '#c47a00',
+    description: 'LLM proxies, observability, spec-driven dev, streaming, CI/CD for agents'
+  },
+  'responsible-agentic': {
+    title: 'Responsible Agentic AI',
     weight: '10–15%',
-    icon: '🔒',
-    color: '#374151',
-    description: 'Content exclusions, duplication detection, org policies'
+    icon: '⚖️',
+    color: '#c0392b',
+    description: 'Guardrails, human-in-the-loop, content filtering, safety, bias mitigation'
   }
 };
 
 export const QUESTIONS = {
 
   // ═══════════════════════════════════════════════════════
-  // DOMAIN 1 — Responsible AI (15–20%)
+  // DOMAIN 1 — Agentic AI Fundamentals (25–30%)
   // ═══════════════════════════════════════════════════════
-  'responsible-ai': [
+  'agentic-fundamentals': [
     {
-      id: 'ra-01',
-      q: 'Which of the following best describes a key risk of using AI-generated code without human review?',
+      id: 'af-01',
+      q: 'What is the key characteristic that distinguishes an AI agent from a simple LLM chat interface?',
       options: [
-        'The code may use newer syntax not supported by the current compiler',
-        'The AI may introduce subtle bugs, security flaws, or license-incompatible code',
-        'AI-generated code always runs slower than human-written code',
-        'The code will never compile without IDE plugins'
+        'An agent uses a larger language model',
+        'An agent can take actions, use tools, and make sequential decisions to complete multi-step goals',
+        'An agent always requires internet access',
+        'An agent can only run in the cloud'
       ],
       answer: 1,
-      explanation: 'AI models can produce plausible-looking code that contains logic errors, security vulnerabilities, or snippets from copyleft-licensed training data — all requiring human review before use.'
+      explanation: 'Agents are autonomous — they perceive state, decide actions, call tools, observe results, and iterate until the goal is reached. A chat interface just returns a single response.'
+    },
+    {
+      id: 'af-02',
+      q: 'In the ReAct (Reason + Act) pattern, what is the correct cycle order?',
+      options: [
+        'Act → Observe → Reason → Repeat',
+        'Reason → Act → Observe → Repeat',
+        'Observe → Act → Reason → Repeat',
+        'Plan → Execute → Report → End'
+      ],
+      answer: 1,
+      explanation: 'ReAct: the model Reasons about what to do, Acts (calls a tool), Observes the result, then Reasons again. This loop continues until the task is complete.'
+    },
+    {
+      id: 'af-03',
+      q: 'What problem does an orchestrator agent solve in a multi-agent system?',
+      options: [
+        'It stores conversation history in a database',
+        'It coordinates multiple specialised sub-agents, routing tasks and aggregating results',
+        'It provides the user interface for the application',
+        'It handles authentication and authorisation'
+      ],
+      answer: 1,
+      explanation: 'The orchestrator is the "brain" — it decides which sub-agent handles which task and merges their outputs, enabling parallel specialised work.'
+    },
+    {
+      id: 'af-04',
+      q: 'Which of the following best describes "tool use" in the context of AI agents?',
+      options: [
+        'The model switching between different programming languages',
+        'The model calling external functions (APIs, databases, code execution) to get real-world data or take actions',
+        'The use of IDE plugins to assist coding',
+        'Running multiple AI models in sequence'
+      ],
+      answer: 1,
+      explanation: 'Tool use (function calling) lets agents interact with the world — fetching weather, running queries, reading files, calling APIs — beyond what the LLM knows from training.'
+    },
+    {
+      id: 'af-05',
+      q: 'What is a primary risk of an agentic loop without a termination condition?',
+      options: [
+        'The agent will produce lower-quality responses',
+        'The agent may run indefinitely, consuming compute and potentially taking unintended actions',
+        'The agent will switch to a smaller model automatically',
+        'The agent will stop responding after 10 steps'
+      ],
+      answer: 1,
+      explanation: 'Without max-iteration limits or goal-completion checks, agents can loop forever. Always define stopping conditions and set token/step budgets.'
+    },
+    {
+      id: 'af-06',
+      q: 'In a parallel tool-call pattern, what is the main benefit over sequential calls?',
+      options: [
+        'Parallel calls use less memory',
+        'Parallel calls reduce total latency by executing independent tasks simultaneously',
+        'Parallel calls are more accurate',
+        'Parallel calls avoid rate limits'
+      ],
+      answer: 1,
+      explanation: 'When tasks are independent (e.g., fetch weather AND fetch traffic at the same time), parallelism cuts total wall-clock time from sum-of-latencies to max-of-latencies.'
+    },
+    {
+      id: 'af-07',
+      q: 'What does "context window management" mean in long-running agent tasks?',
+      options: [
+        'Resizing the browser window for the agent UI',
+        'Summarising or pruning conversation history so the agent stays within the LLM token limit',
+        'Managing CPU and memory on the host machine',
+        'Setting the timeout for each tool call'
+      ],
+      answer: 1,
+      explanation: 'LLMs have fixed context limits. Long agent runs must compress or summarise prior steps — otherwise the agent loses access to early context or hits token limits.'
+    },
+    {
+      id: 'af-08',
+      q: 'What is "grounding" in the context of agentic AI?',
+      options: [
+        'Connecting the agent to a physical device',
+        'Anchoring agent responses to verified, current data sources rather than relying solely on training data',
+        'Limiting the agent to only safe topics',
+        'Compiling the agent code before deployment'
+      ],
+      answer: 1,
+      explanation: 'Grounding reduces hallucination by giving agents access to real-time facts via tool calls, RAG, or injected context rather than relying on potentially stale training knowledge.'
+    }
+  ],
+
+  // ═══════════════════════════════════════════════════════
+  // DOMAIN 2 — Copilot Agentic Features (25–30%)
+  // ═══════════════════════════════════════════════════════
+  'copilot-agentic': [
+    {
+      id: 'ca-01',
+      q: 'What is GitHub Copilot Agent Mode?',
+      options: [
+        'A mode that lets Copilot only suggest single-line completions',
+        'An autonomous mode where Copilot iterates across multiple files, runs terminal commands, and self-corrects until a task is complete',
+        'A mode for generating GitHub Actions workflows',
+        'A read-only mode for code review'
+      ],
+      answer: 1,
+      explanation: 'Agent Mode turns Copilot into an orchestrator — it plans multi-step tasks, edits files, reads compiler errors, runs tests, and iterates. The user approves terminal commands.'
+    },
+    {
+      id: 'ca-02',
+      q: 'How does Copilot Edit Mode differ from Agent Mode?',
+      options: [
+        'Edit Mode is faster because it uses a smaller model',
+        'Edit Mode applies targeted edits across specified files with user direction; Agent Mode autonomously plans and executes the full workflow',
+        'Edit Mode only works in VS Code; Agent Mode works everywhere',
+        'Edit Mode cannot modify existing files'
+      ],
+      answer: 1,
+      explanation: 'Edit Mode is user-directed multi-file editing. Agent Mode is autonomous — it decides what files to touch, what commands to run, and iterates on failures without prompting.'
+    },
+    {
+      id: 'ca-03',
+      q: 'What are GitHub Models and why are they useful for agentic development?',
+      options: [
+        'Custom ML models you train on your own code',
+        'A free inference API on GitHub that lets you test and switch between LLMs (GPT-4o, Llama, Phi) without credit cards or quotas',
+        'GitHub\'s proprietary AI models only available for enterprises',
+        'Models that auto-generate GitHub Actions workflows'
+      ],
+      answer: 1,
+      explanation: 'GitHub Models provides free access to frontier models via an OpenAI-compatible endpoint. Ideal for prototyping agents without committing to a paid API key.'
+    },
+    {
+      id: 'ca-04',
+      q: 'What is a GitHub Copilot Extension?',
+      options: [
+        'A VS Code plugin that adds syntax highlighting',
+        'A GitHub App that integrates a custom agent or external tool directly into the Copilot Chat interface',
+        'A browser extension for GitHub.com',
+        'An extension that increases Copilot\'s context window'
+      ],
+      answer: 1,
+      explanation: 'Copilot Extensions let developers expose their own agents (or third-party services) as @-mentionable skills in Copilot Chat — e.g., @datadog, @sentry, or a custom deployment agent.'
+    },
+    {
+      id: 'ca-05',
+      q: 'In Copilot Agent Mode, what is the purpose of the "human confirmation" step before running terminal commands?',
+      options: [
+        'To slow down the agent so it does not use too many tokens',
+        'To maintain human oversight — the user reviews and approves each shell command before it executes',
+        'To allow the agent to request more context',
+        'To prevent the agent from accessing the internet'
+      ],
+      answer: 1,
+      explanation: 'This is the human-in-the-loop safety mechanism. Agentic systems that can execute code must require approval for irreversible or high-impact actions.'
+    },
+    {
+      id: 'ca-06',
+      q: 'What is Copilot Workspace?',
+      options: [
+        'A folder on your computer where Copilot stores its cache',
+        'An AI-native dev environment that takes a GitHub Issue and generates a full plan, code changes, and PR — all from the browser',
+        'A shared workspace for pair programming with a colleague',
+        'The VS Code workspace settings file'
+      ],
+      answer: 1,
+      explanation: 'Copilot Workspace bridges issue → implementation. It generates a spec, a plan, and code edits for a GitHub Issue, letting you review and iterate before opening a PR.'
+    },
+    {
+      id: 'ca-07',
+      q: 'What distinguishes GitHub Copilot Spark from other Copilot products?',
+      options: [
+        'Spark is a command-line tool for generating bash scripts',
+        'Spark enables non-developers to build and deploy full web apps through natural language alone — no code required',
+        'Spark provides faster code completions in the IDE',
+        'Spark is an AI model optimised for speed over accuracy'
+      ],
+      answer: 1,
+      explanation: 'Spark democratises app creation — it targets business users and non-coders, generating full micro-apps from prompts and deploying them automatically.'
+    },
+    {
+      id: 'ca-08',
+      q: 'What is the role of GITHUB_TOKEN when using GitHub Models in LiteLLM or similar proxies?',
+      options: [
+        'It authenticates git push operations',
+        'It authorises the inference API calls to the Azure-backed GitHub Models endpoint',
+        'It encrypts the model responses',
+        'It is only needed for private repositories'
+      ],
+      answer: 1,
+      explanation: 'GitHub Models uses the GitHub REST API token for auth. The endpoint is OpenAI-compatible; you pass the GITHUB_TOKEN as the Bearer token.'
+    }
+  ],
+
+  // ═══════════════════════════════════════════════════════
+  // DOMAIN 3 — MCP & Tool Integration (15–20%)
+  // ═══════════════════════════════════════════════════════
+  'mcp-tools': [
+    {
+      id: 'mt-01',
+      q: 'What is the Model Context Protocol (MCP)?',
+      options: [
+        'A protocol for compressing LLM context windows',
+        'An open standard that defines how AI agents discover and invoke external tools and data sources over a standard interface',
+        'A GitHub authentication protocol for AI services',
+        'A way to limit how many tokens an LLM can generate'
+      ],
+      answer: 1,
+      explanation: 'MCP is a universal plug-in standard — any AI client (Claude, Copilot, etc.) can connect to any MCP server (databases, code tools, APIs) without custom integrations.'
+    },
+    {
+      id: 'mt-02',
+      q: 'In the MCP architecture, what role does an MCP Host play?',
+      options: [
+        'The MCP Host stores the vector embeddings for RAG',
+        'The MCP Host is the AI application (e.g., Claude Code, VS Code) that manages connections to MCP servers and calls their tools',
+        'The MCP Host is the physical server running the LLM',
+        'The MCP Host enforces rate limits on tool calls'
+      ],
+      answer: 1,
+      explanation: 'The Host (AI client) discovers available tools from connected MCP Servers and decides when to invoke them based on user requests or agent reasoning.'
+    },
+    {
+      id: 'mt-03',
+      q: 'What transport mechanisms does MCP support for server-client communication?',
+      options: [
+        'Only WebSockets',
+        'stdio (local process) and HTTP with Server-Sent Events (remote)',
+        'Only REST over HTTPS',
+        'gRPC and GraphQL only'
+      ],
+      answer: 1,
+      explanation: 'stdio is used for local MCP servers (spawned as subprocesses). HTTP+SSE is for remote/hosted MCP servers. Both use the same JSON-RPC message format.'
+    },
+    {
+      id: 'mt-04',
+      q: 'Which of the following is an example of an MCP "tool" vs an MCP "resource"?',
+      options: [
+        'A tool reads static data; a resource executes code',
+        'A tool performs an action with side effects (e.g., run a query, create a file); a resource exposes read-only data (e.g., a file, a database row)',
+        'Tools and resources are identical concepts',
+        'A tool is server-side; a resource is client-side'
+      ],
+      answer: 1,
+      explanation: 'MCP distinguishes: Resources (read-only data exposed to the LLM as context) vs Tools (callable functions that take parameters and can have side effects).'
+    },
+    {
+      id: 'mt-05',
+      q: 'What does "function calling" (tool use) in an LLM API allow an agent to do?',
+      options: [
+        'Call JavaScript functions directly from the model weights',
+        'Signal to the calling code which external function to invoke with which arguments, enabling structured tool dispatch',
+        'Call other AI models from within a single inference request',
+        'Access the host file system directly from the model'
+      ],
+      answer: 1,
+      explanation: 'Function calling lets the LLM output a structured JSON object describing the tool name and arguments. The calling code executes the actual function and feeds results back as context.'
+    },
+    {
+      id: 'mt-06',
+      q: 'Why is Serena a useful MCP server for AI coding agents?',
+      options: [
+        'Serena provides free GPU compute for model inference',
+        'Serena exposes semantic code navigation tools (find symbol, search patterns, get file overview) so agents understand codebases structurally, not just by text search',
+        'Serena manages GitHub pull request reviews automatically',
+        'Serena provides internet search capabilities to the agent'
+      ],
+      answer: 1,
+      explanation: 'Serena uses Language Server Protocol (LSP) under the hood to give agents symbol-aware navigation — much more reliable than grep for refactoring or understanding large codebases.'
+    }
+  ],
+
+  // ═══════════════════════════════════════════════════════
+  // DOMAIN 4 — Building Agentic Applications (15–20%)
+  // ═══════════════════════════════════════════════════════
+  'building-agents': [
+    {
+      id: 'ba-01',
+      q: 'What is the primary purpose of an LLM proxy like LiteLLM in an agentic application?',
+      options: [
+        'To train custom models on your data',
+        'To provide a single OpenAI-compatible endpoint that routes requests to multiple LLM backends with fallback, key management, and observability',
+        'To cache all LLM responses permanently',
+        'To compress prompts before sending them to the model'
+      ],
+      answer: 1,
+      explanation: 'An LLM proxy decouples your application from any specific provider. Swap Ollama for GPT-4o, add Langfuse tracing, or enforce rate limits — all without changing app code.'
+    },
+    {
+      id: 'ba-02',
+      q: 'What does agent observability via a tool like Langfuse enable that standard application logs do not?',
+      options: [
+        'Lower API costs by caching responses',
+        'Trace-level visibility into every LLM call: inputs, outputs, token counts, latency, and multi-step agent reasoning chains',
+        'Automatic bug fixing in agent code',
+        'Blocking harmful model outputs in real time'
+      ],
+      answer: 1,
+      explanation: 'Langfuse captures the full agent trace — every prompt, every tool call, every sub-agent response — making it possible to debug why an agent made a decision or where it failed.'
+    },
+    {
+      id: 'ba-03',
+      q: 'What is Spec-Driven Development (SDD) and why is it recommended for agentic projects?',
+      options: [
+        'Writing unit tests before writing code',
+        'Defining a formal specification (user stories, acceptance criteria, module contracts) before any code is written, so both humans and AI agents have unambiguous intent to work from',
+        'Generating code automatically from database schemas',
+        'Using static analysis tools to check code correctness'
+      ],
+      answer: 1,
+      explanation: 'SDD gives AI coding agents precise contracts and constraints to work within, reducing hallucinated features and scope creep. Tools like spec-kit formalise this workflow.'
+    },
+    {
+      id: 'ba-04',
+      q: 'What is Server-Sent Events (SSE) streaming used for in agentic LLM applications?',
+      options: [
+        'Sending push notifications to mobile devices',
+        'Delivering LLM token output incrementally to the client as it is generated, enabling real-time streaming responses',
+        'Synchronising state between multiple agent instances',
+        'Compressing large model responses before transmission'
+      ],
+      answer: 1,
+      explanation: 'SSE lets the browser receive each generated token as it arrives instead of waiting for the full response. This dramatically improves perceived responsiveness for long agent outputs.'
+    },
+    {
+      id: 'ba-05',
+      q: 'In a CI/CD pipeline for an agentic app, what should the "validate" job check beyond normal code linting?',
+      options: [
+        'Whether the LLM is online and responding',
+        'That all agent configuration files (LLM config, tool definitions, system prompts) are valid and all required modules exist',
+        'That the agent has passed a Turing test',
+        'That the model weights have not changed'
+      ],
+      answer: 1,
+      explanation: 'Agent apps have extra artefacts — YAML configs, prompt templates, tool schemas, spec docs — that must be validated in CI to catch misconfigurations before deployment.'
+    },
+    {
+      id: 'ba-06',
+      q: 'What is the fallback pattern in assistant.js of CycleWay, and why is it important?',
+      options: [
+        'It switches to a different routing API if GraphHopper is down',
+        'It tries LiteLLM proxy first; if unavailable it falls back to direct Ollama — ensuring the agent works even when the proxy is offline',
+        'It falls back to a simpler model if the primary model returns an error',
+        'It caches the last successful response and reuses it on failure'
+      ],
+      answer: 1,
+      explanation: 'Resilient agents must handle infrastructure failures gracefully. The LiteLLM→Ollama fallback ensures the AI advisor keeps working even if the Docker stack is not running.'
+    }
+  ],
+
+  // ═══════════════════════════════════════════════════════
+  // DOMAIN 5 — Responsible Agentic AI (10–15%)
+  // ═══════════════════════════════════════════════════════
+  'responsible-agentic': [
+    {
+      id: 'ra-01',
+      q: 'What is "prompt injection" in the context of AI agents, and why is it more dangerous than in basic chat?',
+      options: [
+        'Sending very long prompts to overwhelm the model',
+        'Malicious content in agent inputs that hijacks the agent\'s instructions — more dangerous because agents can take real-world actions (run code, call APIs, modify files)',
+        'Injecting SQL into database queries via the AI',
+        'Using special characters to confuse the tokeniser'
+      ],
+      answer: 1,
+      explanation: 'In chat, a successful injection just changes the response. In an agent, it can cause the agent to exfiltrate data, execute malicious code, or take destructive actions on external systems.'
     },
     {
       id: 'ra-02',
-      q: 'What does "hallucination" mean in the context of generative AI?',
+      q: 'What is the principle of "minimal footprint" for AI agents?',
       options: [
-        'The model refusing to answer a question',
-        'A model generating confident but factually incorrect or invented outputs',
-        'An AI generating visual content instead of text',
-        'The model producing outputs that are too verbose'
+        'Using the smallest possible LLM to reduce cost',
+        'Agents should request only necessary permissions, avoid storing sensitive data, and prefer reversible actions — limiting potential damage if something goes wrong',
+        'Minimising the number of tokens in each prompt',
+        'Running agents on low-power hardware'
       ],
       answer: 1,
-      explanation: 'Hallucination refers to a model generating confident, plausible-sounding but incorrect or completely fabricated information — a fundamental limitation of LLMs that requires validation.'
+      explanation: 'Like the principle of least privilege in security, minimal footprint limits the blast radius of agent errors. An agent that only has read access cannot accidentally delete data.'
     },
     {
       id: 'ra-03',
-      q: 'Which practice best supports responsible use of GitHub Copilot?',
+      q: 'What is a "guardrail" in an agentic AI system?',
       options: [
-        'Accepting all suggestions without review to maximize speed',
-        'Disabling linting so suggestions are not overridden',
-        'Reviewing and testing every AI suggestion before committing it',
-        'Using Copilot only for comments, not code'
+        'A physical safety barrier around server hardware',
+        'A validation layer that checks inputs and outputs against rules — blocking harmful content, off-topic requests, or policy violations before they reach or leave the model',
+        'A rate limiter that prevents too many API calls',
+        'A monitoring tool that alerts on model downtime'
       ],
-      answer: 2,
-      explanation: 'Responsible AI use requires human oversight. Every suggestion should be reviewed, tested, and understood before being accepted into the codebase.'
+      answer: 1,
+      explanation: 'Guardrails are the safety net. Input guardrails block prompt injections and policy violations. Output guardrails catch hallucinations, PII leakage, or harmful content before it reaches users.'
     },
     {
       id: 'ra-04',
-      q: 'A developer uses Copilot to generate an authentication function. What is the MOST important next step?',
+      q: 'Why is "human-in-the-loop" (HITL) especially important for agentic AI compared to passive AI tools?',
       options: [
-        'Rename the function to match company style',
-        'Check the suggestion for known security vulnerabilities and test it thoroughly',
-        'Ask Copilot to optimize the function for performance',
-        'Add comments explaining what the function does'
+        'Because agents are less accurate than non-agentic models',
+        'Because agents can take irreversible real-world actions — human approval checkpoints prevent accidental data deletion, unintended deployments, or harmful API calls',
+        'Because regulations require human approval for all AI outputs',
+        'Because agents cannot understand context without human clarification'
       ],
       answer: 1,
-      explanation: 'Security-critical code generated by AI must be manually reviewed and tested for vulnerabilities such as injection, improper input validation, or insecure defaults.'
+      explanation: 'HITL is the primary mitigation for agentic risk. Before irreversible actions (delete, deploy, send), require explicit human confirmation. This is why Copilot Agent Mode shows command previews before execution.'
     },
     {
       id: 'ra-05',
-      q: 'Which of the following is a potential harm of AI-generated content in software development?',
+      q: 'What does it mean for an AI agent to be "transparent" to its users?',
       options: [
-        'Reduced compilation time',
-        'Automatic code formatting',
-        'Perpetuating biased patterns from training data into production systems',
-        'Improved IDE performance'
+        'The agent\'s source code must be publicly available',
+        'Users should be clearly informed they are interacting with an AI, understand what actions it can take, and be able to audit its decisions and tool calls',
+        'The agent must explain every line of code it generates',
+        'The agent must display its confidence score for every response'
       ],
-      answer: 2,
-      explanation: 'AI models trained on biased datasets can reproduce those biases in generated code, documentation, or test data — a potential harm that developers must actively watch for.'
+      answer: 1,
+      explanation: 'Transparency builds appropriate trust. Users who understand the agent\'s capabilities and limitations make better decisions about when to rely on it vs seek human expertise.'
     },
     {
       id: 'ra-06',
-      q: 'What is the purpose of a "human-in-the-loop" approach when working with AI tools?',
+      q: 'How should an agentic application handle a situation where the AI model refuses to complete a task?',
       options: [
-        'To slow down the development process for quality control',
-        'To ensure a human reviews and approves AI outputs before they have real-world impact',
-        'To train the AI model with human feedback in real-time',
-        'To replace AI tools with manual processes'
+        'Automatically retry with a different prompt until it succeeds',
+        'Surface the refusal clearly to the user, explain why the task could not be completed, and offer alternative actions — never silently fail or bypass safety measures',
+        'Log the failure and attempt the task with a less restrictive model',
+        'Clear the conversation history and restart the agent'
       ],
       answer: 1,
-      explanation: 'Human-in-the-loop ensures that consequential AI decisions or outputs are reviewed by a person, reducing the risk of harm from incorrect or biased AI outputs.'
-    },
-    {
-      id: 'ra-07',
-      q: 'When should a developer validate the output of GitHub Copilot?',
-      options: [
-        'Only when working on security-critical features',
-        'Never — Copilot is trained on high-quality code',
-        'Only when the suggestion is longer than 10 lines',
-        'Always, regardless of the task type'
-      ],
-      answer: 3,
-      explanation: 'Copilot output should always be validated. Even for simple tasks, suggestions may be incorrect, inefficient, or carry licensing implications.'
-    },
-    {
-      id: 'ra-08',
-      q: 'Which of these describes an ethical concern specific to AI coding assistants?',
-      options: [
-        'They can make code completion faster',
-        'They may suggest code from open-source projects with restrictive licenses',
-        'They require internet access to function',
-        'They integrate with version control systems'
-      ],
-      answer: 1,
-      explanation: 'AI models trained on public code may reproduce snippets from copyleft-licensed code (GPL, LGPL), which could create legal issues if included in commercial software without proper attribution.'
-    }
-  ],
-
-  // ═══════════════════════════════════════════════════════
-  // DOMAIN 2 — Copilot Features (25–30%)
-  // ═══════════════════════════════════════════════════════
-  'copilot-features': [
-    {
-      id: 'cf-01',
-      q: 'What is Agent Mode in GitHub Copilot?',
-      options: [
-        'A mode where Copilot auto-commits code changes',
-        'A mode where Copilot autonomously plans, edits multiple files, and runs terminal commands to complete multi-step tasks',
-        'A dedicated GitHub Actions integration for CI/CD pipelines',
-        'A feature that lets Copilot browse the web for answers'
-      ],
-      answer: 1,
-      explanation: 'Agent Mode enables Copilot to work autonomously across multiple files, plan tasks, execute terminal commands, and iterate on results — making it suitable for complex, multi-step engineering tasks.'
-    },
-    {
-      id: 'cf-02',
-      q: 'What is the Model Context Protocol (MCP)?',
-      options: [
-        'A GitHub API authentication method',
-        'A protocol that controls how much code Copilot reads per request',
-        'An open standard that enables AI models to connect to external tools and data sources',
-        'A Copilot feature for switching between language models'
-      ],
-      answer: 2,
-      explanation: 'MCP (Model Context Protocol) is an open standard that lets AI assistants like Copilot integrate with external tools, APIs, and data sources, enabling richer agentic workflows.'
-    },
-    {
-      id: 'cf-03',
-      q: 'What distinguishes Edit Mode from Agent Mode in Copilot?',
-      options: [
-        'Edit Mode works only in VS Code; Agent Mode works everywhere',
-        'Edit Mode applies targeted edits across specified files; Agent Mode works autonomously with broader scope and can run commands',
-        'Edit Mode requires a Copilot Enterprise subscription; Agent Mode is free',
-        'There is no difference — they are aliases for the same feature'
-      ],
-      answer: 1,
-      explanation: 'Edit Mode lets you specify files to change and applies targeted refactors. Agent Mode has broader autonomy — it plans, edits, runs commands, and iterates without needing each step specified.'
-    },
-    {
-      id: 'cf-04',
-      q: 'What are Sub-Agents in the context of GitHub Copilot?',
-      options: [
-        'Secondary Copilot accounts for team members',
-        'Specialized agents delegated specific sub-tasks to optimize context usage within a larger agentic workflow',
-        'GitHub Actions runners configured for AI workloads',
-        'API keys used to authenticate additional Copilot features'
-      ],
-      answer: 1,
-      explanation: 'Sub-Agents are specialized agents that handle specific parts of a complex task, allowing the orchestrating agent to delegate focused work while managing overall context usage efficiently.'
-    },
-    {
-      id: 'cf-05',
-      q: 'Which command is used to ask GitHub Copilot CLI for help with a shell command?',
-      options: [
-        'gh copilot run',
-        'gh copilot explain',
-        'gh copilot suggest',
-        'gh copilot ask'
-      ],
-      answer: 2,
-      explanation: '`gh copilot suggest` generates shell commands from natural language descriptions. `gh copilot explain` explains what a given command does. Both are core Copilot CLI features.'
-    },
-    {
-      id: 'cf-06',
-      q: 'What is GitHub Copilot Spaces?',
-      options: [
-        'A cloud IDE environment for remote development',
-        'A collaborative feature that gives Copilot shared context about a project to provide more relevant assistance',
-        'A GitHub Pages feature enhanced with AI generation',
-        'A file storage system for Copilot-generated code'
-      ],
-      answer: 1,
-      explanation: 'Spaces provides Copilot with persistent, shared project context, making its responses more relevant to the specific codebase, conventions, and goals of a team or project.'
-    },
-    {
-      id: 'cf-07',
-      q: 'A developer wants to use GitHub Copilot for Pull Request review automation. Which feature enables this?',
-      options: [
-        'Copilot CLI with `gh pr review`',
-        'Copilot Code Review with customizable review standards via instruction files',
-        'Copilot Agent Mode running in CI/CD',
-        'GitHub Actions with Copilot extension'
-      ],
-      answer: 1,
-      explanation: 'Copilot Code Review integrates into the PR workflow and can be customized with instruction files that define review standards specific to a project or organization.'
-    },
-    {
-      id: 'cf-08',
-      q: 'How can an organization manager control Copilot feature availability across IDEs?',
-      options: [
-        'By configuring individual `.github/copilot.yml` files in each repository',
-        'Through organization-wide policy management in GitHub settings, enabling or restricting features across IDEs and github.com',
-        'By contacting GitHub Support to toggle features per IDE',
-        'Through the GitHub Marketplace'
-      ],
-      answer: 1,
-      explanation: 'Organization administrators can manage Copilot policies centrally — enabling or disabling specific features, restricting access to certain IDEs, and managing subscriptions via the REST API.'
-    },
-    {
-      id: 'cf-09',
-      q: 'What is GitHub Copilot Spark?',
-      options: [
-        'A performance profiling tool powered by Copilot',
-        'A feature that lets users create web apps with natural language prompts, no coding required',
-        'A Copilot integration for Apache Spark data pipelines',
-        'A debugging assistant for runtime errors'
-      ],
-      answer: 1,
-      explanation: 'GitHub Copilot Spark allows non-developers to create simple web applications using natural language, making AI-powered development accessible without coding knowledge.'
-    },
-    {
-      id: 'cf-10',
-      q: 'Which of the following best describes a "prompt file" in GitHub Copilot?',
-      options: [
-        'A log file that records all prompts sent to Copilot',
-        'A Markdown file that can be referenced in Copilot Chat to provide reusable context for consistent responses',
-        'A configuration file that sets the AI model used by Copilot',
-        'A file that stores encrypted API keys for Copilot authentication'
-      ],
-      answer: 1,
-      explanation: 'Prompt files (`.github/copilot-instructions.md` or reusable `.prompt.md` files) let teams define standard instructions that Copilot references automatically, ensuring consistent, project-specific responses.'
-    }
-  ],
-
-  // ═══════════════════════════════════════════════════════
-  // DOMAIN 3 — Data & Architecture (10–15%)
-  // ═══════════════════════════════════════════════════════
-  'data-architecture': [
-    {
-      id: 'da-01',
-      q: 'When you type code in your IDE with Copilot active, what happens to that code?',
-      options: [
-        'It is stored permanently in GitHub\'s servers for model training',
-        'It is transmitted as a prompt to the Copilot service, which returns suggestions; it is not stored for training by default',
-        'It is compiled locally before being sent to Copilot',
-        'It is encrypted and shared only with enterprise customers'
-      ],
-      answer: 1,
-      explanation: 'Code is sent to the Copilot proxy as context for generating suggestions. By default, GitHub does not use individual user code from paid plans to train Copilot models.'
-    },
-    {
-      id: 'da-02',
-      q: 'What is the role of the Copilot proxy in the architecture?',
-      options: [
-        'To cache code suggestions for offline use',
-        'To filter prompts and responses, applying content policies and privacy rules before reaching the LLM',
-        'To translate code between programming languages',
-        'To authenticate users with GitHub OAuth'
-      ],
-      answer: 1,
-      explanation: 'The Copilot proxy sits between the IDE and the LLM. It filters inputs and outputs, applies content exclusions, and enforces safety policies — a key architectural component for privacy and compliance.'
-    },
-    {
-      id: 'da-03',
-      q: 'What data makes up the "prompt" sent to the Copilot LLM?',
-      options: [
-        'Only the current line being typed',
-        'The entire git history of the repository',
-        'A combination of surrounding code context, open file content, IDE state, and chat history',
-        'A hash of the current file'
-      ],
-      answer: 2,
-      explanation: 'Copilot builds prompts from multiple context sources: the current file content, surrounding code, related open files, and chat history — all assembled to give the LLM maximum relevant context.'
-    },
-    {
-      id: 'da-04',
-      q: 'Which of these is a known limitation of Large Language Models (LLMs) used by Copilot?',
-      options: [
-        'They cannot process any code longer than 10 lines',
-        'They have a fixed knowledge cutoff and a context window limit that bounds what they can reason about',
-        'They only work with JavaScript and Python',
-        'They require GPU hardware in the client\'s machine'
-      ],
-      answer: 1,
-      explanation: 'LLMs have a training data cutoff date (they don\'t know recent events) and a context window limit (they can only process a fixed number of tokens at once). Both affect the quality of suggestions.'
-    },
-    {
-      id: 'da-05',
-      q: 'What happens after the LLM generates a code suggestion in the Copilot pipeline?',
-      options: [
-        'It is immediately inserted into the editor',
-        'It goes through post-processing: filtering, duplication detection, and safety checks before reaching the developer',
-        'It is reviewed by a GitHub engineer',
-        'It is cached for 24 hours and reused for identical prompts'
-      ],
-      answer: 1,
-      explanation: 'After LLM generation, suggestions are post-processed through filters including duplication detection (comparing against public code), safety checks, and content policy enforcement before being displayed.'
-    },
-    {
-      id: 'da-06',
-      q: 'In the Copilot data flow, what does "post-processing" include?',
-      options: [
-        'Syntax highlighting and code formatting',
-        'Commit message generation',
-        'Duplication detection, security warnings, and content policy filtering',
-        'Performance benchmarking of suggestions'
-      ],
-      answer: 2,
-      explanation: 'Post-processing applies safety checks, compares suggestions against known public code for duplication (enabling the duplication detection feature), and enforces content policies.'
-    },
-    {
-      id: 'da-07',
-      q: 'What is a "context window" in the context of LLMs?',
-      options: [
-        'The portion of the screen where Copilot suggestions are displayed',
-        'The maximum amount of text (tokens) a model can process in a single request',
-        'A settings panel for configuring Copilot behavior',
-        'The time window during which Copilot is active'
-      ],
-      answer: 1,
-      explanation: 'The context window is the total amount of text (measured in tokens) that a model can process at once — including both the input prompt and the generated output. Exceeding it truncates context.'
-    },
-    {
-      id: 'da-08',
-      q: 'For GitHub Copilot for Business/Enterprise, which statement about training data is correct?',
-      options: [
-        'All user code is used to train future versions of Copilot',
-        'Code suggestions are shared across enterprise accounts for learning',
-        'User code is not retained or used to train GitHub\'s foundational models by default',
-        'Training opt-out requires contacting GitHub Support'
-      ],
-      answer: 2,
-      explanation: 'For Copilot Business and Enterprise, GitHub does not use customer code or prompts to train its foundational models by default — a key privacy commitment for enterprise customers.'
-    }
-  ],
-
-  // ═══════════════════════════════════════════════════════
-  // DOMAIN 4 — Prompt Engineering (10–15%)
-  // ═══════════════════════════════════════════════════════
-  'prompt-engineering': [
-    {
-      id: 'pe-01',
-      q: 'What is "zero-shot prompting"?',
-      options: [
-        'Sending a prompt with no text — only code',
-        'Asking the model to complete a task with no examples provided in the prompt',
-        'A method that requires zero API calls',
-        'Prompting without using any keywords'
-      ],
-      answer: 1,
-      explanation: 'Zero-shot prompting asks the model to perform a task based on the description alone, without any examples. It relies on the model\'s training to understand what\'s expected.'
-    },
-    {
-      id: 'pe-02',
-      q: 'What is "few-shot prompting"?',
-      options: [
-        'Sending very short prompts to save tokens',
-        'Including one or more examples of desired input/output in the prompt to guide the model',
-        'Prompting the model multiple times and averaging the results',
-        'Using only a few words in the prompt for better performance'
-      ],
-      answer: 1,
-      explanation: 'Few-shot prompting includes examples of the desired input/output pattern in the prompt itself, helping the model understand the expected format and behavior without fine-tuning.'
-    },
-    {
-      id: 'pe-03',
-      q: 'Which of these is a best practice for crafting effective Copilot prompts?',
-      options: [
-        'Write prompts as vague as possible to get creative suggestions',
-        'Avoid mentioning the programming language to stay language-agnostic',
-        'Be specific: include the task, constraints, expected output format, and relevant context',
-        'Use only capital letters to emphasize important parts'
-      ],
-      answer: 2,
-      explanation: 'Effective prompts are specific: they describe the goal, constraints, input/output expectations, and provide relevant context. Vague prompts yield generic suggestions.'
-    },
-    {
-      id: 'pe-04',
-      q: 'How does Copilot use "chat history" when generating responses?',
-      options: [
-        'It ignores previous messages and treats each prompt independently',
-        'It includes prior conversation turns as context, allowing it to refer back to earlier requirements and decisions',
-        'Chat history is stored only for the developer\'s reference, not sent to the model',
-        'It replaces the current file context with chat history'
-      ],
-      answer: 1,
-      explanation: 'Copilot Chat includes prior conversation turns in the prompt, enabling multi-turn conversations where later responses can reference earlier requirements, clarifications, and decisions.'
-    },
-    {
-      id: 'pe-05',
-      q: 'A developer wants Copilot to generate a REST API endpoint. Which prompt approach will yield the BEST result?',
-      options: [
-        '"Write an API endpoint"',
-        '"Write a POST /users endpoint in Express.js that validates email, hashes password with bcrypt, stores in MongoDB, and returns 201 with the created user ID"',
-        '"Make an API"',
-        '"Code a web server endpoint for users"'
-      ],
-      answer: 1,
-      explanation: 'Specific prompts that include the HTTP method, path, framework, validation requirements, libraries, and expected response give Copilot enough context to generate accurate, production-ready code.'
-    },
-    {
-      id: 'pe-06',
-      q: 'What does "context crafting" mean in the context of Copilot?',
-      options: [
-        'Designing the UI layout for Copilot\'s chat panel',
-        'Strategically managing which files, comments, and code are open and visible to maximize the relevance of Copilot suggestions',
-        'Writing prompts in a specific programming language',
-        'Configuring the network proxy for Copilot'
-      ],
-      answer: 1,
-      explanation: 'Context crafting is the deliberate practice of managing what code, files, and information Copilot can see — opening relevant files, writing descriptive comments, and structuring prompts to maximize suggestion quality.'
-    },
-    {
-      id: 'pe-07',
-      q: 'What is the effect of adding detailed inline comments before a function signature when using Copilot?',
-      options: [
-        'It slows down Copilot as it has to parse more text',
-        'It has no effect — Copilot ignores comments',
-        'It helps Copilot understand the intent, parameters, and expected behavior, improving suggestion accuracy',
-        'It causes Copilot to only suggest comments, not code'
-      ],
-      answer: 2,
-      explanation: 'Inline comments are part of the context Copilot uses. Detailed comments describing what a function should do, its parameters, return value, and edge cases significantly improve suggestion quality.'
-    },
-    {
-      id: 'pe-08',
-      q: 'Which prompt structure follows the "sandwich" best practice for code generation?',
-      options: [
-        'One-line description → blank line → code',
-        'Context/goal at the top → specific requirements in the middle → expected output format at the end',
-        'Output format first → requirements → context',
-        'Short prompt → long prompt → short prompt'
-      ],
-      answer: 1,
-      explanation: 'Effective prompts structure information as: context/goal (what and why) → specific requirements (constraints, libraries, format) → expected output (structure, error handling). This gives the model a clear framework.'
-    }
-  ],
-
-  // ═══════════════════════════════════════════════════════
-  // DOMAIN 5 — Developer Productivity (10–15%)
-  // ═══════════════════════════════════════════════════════
-  'developer-productivity': [
-    {
-      id: 'dp-01',
-      q: 'How does GitHub Copilot help with "context switching" in development?',
-      options: [
-        'It automatically switches between IDE themes',
-        'It reduces the need to leave the editor to look up documentation, syntax, or examples',
-        'It manages multiple git branches simultaneously',
-        'It syncs context between team members in real time'
-      ],
-      answer: 1,
-      explanation: 'Copilot reduces context switching by providing documentation, examples, and code patterns inline — keeping developers in their IDE instead of switching to browser tabs or external resources.'
-    },
-    {
-      id: 'dp-02',
-      q: 'A developer needs to add unit tests to an existing function. What is the MOST effective Copilot workflow?',
-      options: [
-        'Ask Copilot to delete and rewrite the function with tests included',
-        'Open the function, use Copilot Chat with "Write unit tests for this function covering edge cases, null inputs, and boundary values"',
-        'Disable Copilot and write tests manually for accuracy',
-        'Use Copilot CLI with `gh copilot explain` to understand the function first'
-      ],
-      answer: 1,
-      explanation: 'Copilot Chat is effective for test generation. Being specific about what to cover (edge cases, null inputs, boundaries) yields comprehensive tests. The function context is automatically included.'
-    },
-    {
-      id: 'dp-03',
-      q: 'How can Copilot assist with modernizing legacy code?',
-      options: [
-        'It can automatically deploy the modernized code to production',
-        'It can suggest refactored versions using current language features, modern patterns, and updated libraries while explaining the changes',
-        'It deletes the old code and starts from scratch',
-        'Legacy code modernization is outside Copilot\'s capabilities'
-      ],
-      answer: 1,
-      explanation: 'Copilot can analyze legacy code and suggest modernized equivalents — e.g., converting callbacks to async/await, updating deprecated APIs, or applying current design patterns — with explanations.'
-    },
-    {
-      id: 'dp-04',
-      q: 'Which of these is a valid use case for GitHub Copilot in improving code security?',
-      options: [
-        'Automatically patching vulnerabilities in dependencies',
-        'Scanning git history for leaked secrets',
-        'Suggesting input validation, proper error handling, and flagging insecure patterns like hardcoded credentials',
-        'Configuring GitHub Advanced Security on the repository'
-      ],
-      answer: 2,
-      explanation: 'Copilot can suggest security improvements: validating inputs, using parameterized queries to prevent SQL injection, avoiding hardcoded secrets, and flagging insecure function calls.'
-    },
-    {
-      id: 'dp-05',
-      q: 'A developer is learning a new framework. How does Copilot accelerate this process?',
-      options: [
-        'Copilot provides interactive video tutorials inside the IDE',
-        'Copilot generates framework-idiomatic code examples, explains patterns, and suggests the right APIs — acting as an inline learning aid',
-        'Copilot connects to official documentation sites and downloads PDFs',
-        'Copilot replaces the need to understand the framework at all'
-      ],
-      answer: 1,
-      explanation: 'Copilot accelerates framework learning by generating idiomatic examples inline, explaining unfamiliar patterns when asked, and suggesting the correct API usage — without leaving the editor.'
-    },
-    {
-      id: 'dp-06',
-      q: 'What is sample data generation, and why is it useful with Copilot?',
-      options: [
-        'Creating dummy files to test storage systems',
-        'Generating realistic test data (users, products, orders) that matches the expected data model, saving time in setting up test environments',
-        'Exporting production data to a staging environment',
-        'A Copilot feature for seeding GitHub repositories with example code'
-      ],
-      answer: 1,
-      explanation: 'Copilot can generate realistic sample/mock data based on your data model — e.g., 50 realistic user objects with names, emails, addresses — saving significant time in test environment setup.'
-    },
-    {
-      id: 'dp-07',
-      q: 'Which Copilot approach helps identify edge cases in a function?',
-      options: [
-        'Asking Copilot to document the function',
-        'Running Copilot in Agent Mode on the repository',
-        'Using Copilot Chat: "What edge cases should I test for this function? Include boundary conditions, null values, and invalid inputs"',
-        'Enabling Copilot\'s diagnostic mode'
-      ],
-      answer: 2,
-      explanation: 'Copilot Chat can analyze a function and suggest edge cases to test — boundary conditions, empty/null inputs, invalid types, overflow values — helping developers write more complete test suites.'
-    },
-    {
-      id: 'dp-08',
-      q: 'How can Copilot help with code documentation?',
-      options: [
-        'It publishes documentation to GitHub Pages automatically',
-        'It generates docstrings, inline comments, and README sections based on the code\'s structure and behavior',
-        'It transcribes voice notes into code comments',
-        'Documentation generation requires Copilot Enterprise'
-      ],
-      answer: 1,
-      explanation: 'Copilot can generate JSDoc/docstrings, inline explanations, and README sections by analyzing code structure. This significantly reduces the documentation burden on developers.'
-    }
-  ],
-
-  // ═══════════════════════════════════════════════════════
-  // DOMAIN 6 — Privacy & Safeguards (10–15%)
-  // ═══════════════════════════════════════════════════════
-  'privacy-safeguards': [
-    {
-      id: 'ps-01',
-      q: 'What is "content exclusion" in GitHub Copilot?',
-      options: [
-        'Blocking Copilot from suggesting code from certain programming languages',
-        'Configuring specific files, folders, or repositories so Copilot does not use them as context or suggest code from them',
-        'Preventing Copilot from showing suggestions during code review',
-        'Disabling Copilot for junior developers'
-      ],
-      answer: 1,
-      explanation: 'Content exclusion lets admins specify files, paths, or repositories that Copilot should not use as context or generate suggestions for — useful for protecting sensitive code like secrets management or proprietary algorithms.'
-    },
-    {
-      id: 'ps-02',
-      q: 'What does the "duplication detection" safeguard in Copilot do?',
-      options: [
-        'Prevents two developers from editing the same file simultaneously',
-        'Detects if a generated suggestion closely matches public code, and optionally filters or flags it to avoid license issues',
-        'Removes duplicate function definitions from the codebase',
-        'Blocks the same suggestion from appearing more than once per session'
-      ],
-      answer: 1,
-      explanation: 'Duplication detection compares Copilot suggestions against public code repositories. When enabled, it filters or flags suggestions that closely match public code, reducing the risk of incorporating copyleft-licensed code.'
-    },
-    {
-      id: 'ps-03',
-      q: 'Who owns the code generated by GitHub Copilot?',
-      options: [
-        'GitHub owns all Copilot-generated code',
-        'The AI model\'s creators (e.g., OpenAI) own it',
-        'The developer or organization that accepted and integrated the suggestion owns it, subject to applicable laws',
-        'Code generated by AI cannot be owned by anyone'
-      ],
-      answer: 2,
-      explanation: 'GitHub\'s terms state that developers own the output they produce using Copilot. However, this comes with responsibility — developers must ensure the code doesn\'t violate third-party IP or licenses.'
-    },
-    {
-      id: 'ps-04',
-      q: 'Which configuration prevents Copilot from making suggestions in a sensitive file like `secrets.env`?',
-      options: [
-        'Adding the file to `.gitignore`',
-        'Configuring content exclusions for that file path in the Copilot settings or `copilot-instructions.md`',
-        'Encrypting the file with GPG',
-        'Renaming the file to not include "secret" in the name'
-      ],
-      answer: 1,
-      explanation: 'Content exclusions must be explicitly configured in the Copilot settings (organization or repository level) to prevent Copilot from reading or suggesting content for specific files or paths.'
-    },
-    {
-      id: 'ps-05',
-      q: 'What do audit log events in GitHub Copilot allow administrators to do?',
-      options: [
-        'View every code suggestion Copilot made',
-        'Track policy changes, seat assignments, feature enablement, and other administrative actions for compliance and security monitoring',
-        'See which developers accepted vs. rejected Copilot suggestions',
-        'Monitor the performance latency of Copilot suggestions'
-      ],
-      answer: 1,
-      explanation: 'Audit logs record administrative actions: policy changes, seat grants/revocations, feature toggles, and API access — enabling organizations to maintain compliance and investigate security events.'
-    },
-    {
-      id: 'ps-06',
-      q: 'What is the purpose of security warning suggestions in GitHub Copilot?',
-      options: [
-        'To warn developers when their code editor has a security vulnerability',
-        'To flag potentially insecure code patterns in suggestions before the developer accepts them',
-        'To block all suggestions that contain network calls',
-        'To require two-factor authentication before showing suggestions'
-      ],
-      answer: 1,
-      explanation: 'Copilot can flag insecure code patterns in its own suggestions — such as SQL injection risks, hardcoded credentials, or unsafe deserialization — helping developers catch issues at the point of generation.'
-    },
-    {
-      id: 'ps-07',
-      q: 'How does an organization restrict Copilot to only certain IDEs?',
-      options: [
-        'By uninstalling Copilot extensions in other IDEs for each user',
-        'Through organization-wide policy management that controls feature availability per IDE',
-        'By blocking Copilot\'s CDN domain in the network firewall',
-        'Organizations cannot restrict IDE usage for Copilot'
-      ],
-      answer: 1,
-      explanation: 'GitHub\'s organization settings include Copilot policy controls that let admins enable or disable Copilot for specific IDEs (e.g., VS Code, JetBrains, vim, github.com) organization-wide.'
-    },
-    {
-      id: 'ps-08',
-      q: 'What is a limitation regarding the output generated by Copilot?',
-      options: [
-        'Copilot outputs are guaranteed to be copyright-free',
-        'Developers cannot modify Copilot-generated code without voiding the license',
-        'Copilot cannot guarantee that suggestions are free of third-party IP, making developer review essential',
-        'Copilot outputs are automatically licensed under MIT'
-      ],
-      answer: 2,
-      explanation: 'Copilot does not guarantee its suggestions are free of third-party intellectual property or specific licenses. Developers must review suggestions — especially duplication-detection enabled suggestions — before production use.'
+      explanation: 'Silent failures or automatic bypasses of safety measures destroy user trust and create unpredictable behaviour. Surfacing refusals maintains transparency and keeps humans in control.'
     }
   ]
-};
 
-export function getTotalQuestions() {
-  return Object.values(QUESTIONS).reduce((sum, qs) => sum + qs.length, 0);
-}
+};
 
 export function getQuestionsByDomain(domainKey) {
   return QUESTIONS[domainKey] || [];
@@ -697,4 +489,8 @@ export function getAllQuestions() {
   return Object.entries(QUESTIONS).flatMap(([domain, qs]) =>
     qs.map(q => ({ ...q, domain }))
   );
+}
+
+export function getTotalQuestions() {
+  return getAllQuestions().length;
 }
