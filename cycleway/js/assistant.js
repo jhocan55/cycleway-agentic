@@ -160,17 +160,22 @@ async function* _stream(messages) {
   const headers = { 'Content-Type': 'application/json' };
   if (key) headers['Authorization'] = `Bearer ${key}`;
 
-  const res = await fetch(url, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({
-      model,
-      messages: [{ role: 'system', content: systemPrompt }, ...messages],
-      stream: true,
-      temperature: 0.4,
-      max_tokens: 200
-    })
-  });
+  let res;
+  try {
+    res = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        model,
+        messages: [{ role: 'system', content: systemPrompt }, ...messages],
+        stream: true,
+        temperature: 0.4,
+        max_tokens: 200
+      })
+    });
+  } catch (e) {
+    throw new Error(`Network error connecting to ${via} (${url.split('/')[2]}): ${e.message}`);
+  }
 
   if (!res.ok) throw new Error(`LLM not responding (${res.status}). Run: ollama serve`);
 

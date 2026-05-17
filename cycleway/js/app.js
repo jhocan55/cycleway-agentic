@@ -51,13 +51,22 @@ async function findRoute() {
 
   try {
     toast('📍 Finding locations…');
-    const [from, to] = await Promise.all([geocode(fromQ), geocode(toQ)]);
+    let from, to;
+    try {
+      [from, to] = await Promise.all([geocode(fromQ), geocode(toQ)]);
+    } catch (e) { throw new Error(`Geocode: ${e.message}`); }
 
     toast('🌤️ Loading weather from Open-Meteo…');
-    const wx = await getWeather(from.lat, from.lng);
+    let wx;
+    try {
+      wx = await getWeather(from.lat, from.lng);
+    } catch (e) { throw new Error(`Weather: ${e.message}`); }
 
     toast('🚲 Planning bicycle route…');
-    const bike = await getBikeRoute(from, to, ghKey, prefs);
+    let bike;
+    try {
+      bike = await getBikeRoute(from, to, ghKey, prefs);
+    } catch (e) { throw new Error(`Routing: ${e.message}`); }
 
     toast('🚗 Correlating car traffic data…');
     const [car, traffic] = await Promise.all([
@@ -89,7 +98,7 @@ async function findRoute() {
     toast('✅ Route ready — happy cycling!', 'ok');
   } catch (err) {
     toast(`❌ ${err.message}`, 'err');
-    console.error(err);
+    console.error('[CycleWay]', err);
   }
 
   setBusy(false);
