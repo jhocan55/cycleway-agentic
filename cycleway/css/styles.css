@@ -81,38 +81,6 @@ body {
   grid-template-columns: 400px 1fr;
   min-height: calc(100vh - 56px);
 }
-@media (max-width: 860px) {
-  .app {
-    grid-template-columns: 1fr;
-    min-height: auto;
-  }
-
-  /* Panel: drop sticky so the page scrolls naturally; sit above Leaflet tiles */
-  .panel {
-    position: relative;
-    z-index: 10;
-    max-height: none;
-    overflow-y: visible;
-    border-right: none;
-    border-bottom: 1px solid var(--rule);
-  }
-
-  /* Map: fixed height below the panel, natural flow (no sticky — avoid Leaflet conflicts) */
-  .map-col  { position: relative; z-index: 5; }
-  .map-wrap { min-height: 340px; height: 56vw; max-height: 420px; }
-  #map      { min-height: 340px; height: 100%; }
-
-  /* Toast: smaller and full-width on mobile */
-  .toast { left: 12px; right: 12px; bottom: 12px; max-width: none; font-size: 12px; }
-
-  /* AI log: shorter on mobile to save space */
-  .ai-log { max-height: 160px; }
-
-  /* Preference chips: allow wrap on narrow screens */
-  .chip-row { gap: 5px; }
-  .chip     { font-size: 11px; padding: 5px 10px; }
-}
-
 /* ── PANEL ── */
 .panel {
   background: var(--white);
@@ -456,3 +424,36 @@ body {
 }
 .model-chip:hover  { border-color: var(--sage); color: var(--sage); }
 .model-chip.active { background: var(--sage); border-color: var(--sage); color: #fff; font-weight: 600; }
+
+/* ── MOBILE (must be last so it overrides all base rules above) ── */
+@media (max-width: 860px) {
+  /* Switch from grid to block so panel and map stack naturally */
+  .app { display: block; min-height: auto; }
+
+  /* Panel: plain block — no flex, no sticky, no overflow clipping.
+     Grows to show all content (weather, route, AI) without scroll. */
+  .panel {
+    display: block;
+    position: static;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    border-right: none;
+    border-bottom: 3px solid var(--sage);
+  }
+
+  /* Map: fixed height below the panel */
+  .map-col  { display: block; }
+  .map-wrap { height: 56vw; min-height: 300px; max-height: 420px; }
+  #map      { height: 100%; min-height: 300px; }
+
+  /* Toast: full-width on narrow screens */
+  .toast { left: 12px; right: 12px; bottom: 12px; max-width: none; font-size: 12px; }
+
+  /* AI log: shorter on mobile */
+  .ai-log { max-height: 160px; }
+
+  /* Preference chips: tighter on small screens */
+  .chip-row { gap: 5px; }
+  .chip     { font-size: 11px; padding: 5px 10px; }
+}

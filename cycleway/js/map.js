@@ -49,11 +49,13 @@ export function renderMapRoute(from, to, bike, car, prefs) {
   const emptyMap = document.getElementById('emptyMap');
   emptyMap.style.opacity = '0';
   setTimeout(() => (emptyMap.style.display = 'none'), 300);
+}
 
-  // On mobile, scroll the map into view so the user can see the route
+// Call after all panel content has rendered so the scroll target is stable
+export function scrollToMap() {
   if (window.innerWidth <= 860) {
     setTimeout(() => {
       document.querySelector('.map-col')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 350);
+    }, 200);
   }
 }

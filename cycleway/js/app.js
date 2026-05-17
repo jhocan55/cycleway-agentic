@@ -2,7 +2,7 @@ import { geocode }                    from './geocoding.js';
 import { getBikeRoute, getCarRoute }  from './routing.js';
 import { getWeather }                 from './weather.js';
 import { getTrafficFlow }             from './traffic.js';
-import { initMap, renderMapRoute }    from './map.js';
+import { initMap, renderMapRoute, scrollToMap } from './map.js';
 import { toast, setBusy, renderWeather, renderRoute, renderSafetyBriefing, confirmHighRisk } from './ui.js';
 import { initAssistant, setContext }  from './assistant.js';
 import { analyzeRouteSafety }         from './safety-agent.js';
@@ -95,6 +95,7 @@ async function findRoute() {
     }
 
     setContext(bike, wx, traffic, from, to);
+    scrollToMap(); // after all panel content is in the DOM
     toast('✅ Route ready — happy cycling!', 'ok');
   } catch (err) {
     toast(`❌ ${err.message}`, 'err');
