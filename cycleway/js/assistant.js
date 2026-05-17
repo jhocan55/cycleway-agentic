@@ -21,10 +21,11 @@ export function setModel(key) {
 async function _resolveEndpoint() {
   const m = MODELS[_selectedModel] || MODELS['local'];
   try {
-    const r = await fetch('http://localhost:4000/health', { signal: AbortSignal.timeout(1000) });
-    if (r.ok) return { url: LITELLM_URL, model: m.litellm, key: LITELLM_KEY, via: 'LiteLLM', label: m.label };
-  } catch { /* fall through */ }
-  // GitHub Models require LiteLLM proxy — fall back to local Ollama if proxy is down
+    const r = await fetch('http://localhost:4000/health', { signal: AbortSignal.timeout(1500) });
+    // 401 = auth required but proxy IS running — actual calls include the Bearer key
+    if (r.ok || r.status === 401) return { url: LITELLM_URL, model: m.litellm, key: LITELLM_KEY, via: 'LiteLLM', label: m.label };
+  } catch { /* connection refused or timeout — proxy is down */ }
+  // GitHub Models require the proxy — fall back to local Ollama
   const fallbackModel = m.ollama || MODELS['local'].ollama;
   return { url: OLLAMA_URL, model: fallbackModel, key: '', via: 'Ollama', label: 'llama3.2' };
 }

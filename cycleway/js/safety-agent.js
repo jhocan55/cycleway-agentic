@@ -12,9 +12,9 @@ REASON: [one sentence, max 20 words explaining the main risk or why it is safe]`
 
 async function _endpoint() {
   try {
-    const r = await fetch('http://localhost:4000/health', { signal: AbortSignal.timeout(1000) });
-    if (r.ok) return { url: LITELLM_URL, model: 'local/llama3.2', key: LITELLM_KEY };
-  } catch { /* fall through */ }
+    const r = await fetch('http://localhost:4000/health', { signal: AbortSignal.timeout(1500) });
+    if (r.ok || r.status === 401) return { url: LITELLM_URL, model: 'local/llama3.2', key: LITELLM_KEY };
+  } catch { /* connection refused or timeout */ }
   return { url: OLLAMA_URL, model: 'llama3.2:1b', key: '' };
 }
 
