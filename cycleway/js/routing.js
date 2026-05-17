@@ -28,6 +28,10 @@ async function _graphhopper(from, to, ghKey, prefs) {
   };
 }
 
+// OSRM's bike profile assumes ~30 km/h (routing model speed, not real-world).
+// Override duration with 15 km/h — a realistic average for casual urban cycling.
+const OSRM_BIKE_SPEED_MS = 15 / 3.6;
+
 async function _osrmBike(from, to) {
   const url = `${OSRM_BIKE}/${from.lng},${from.lat};${to.lng},${to.lat}?overview=full&geometries=geojson&steps=true`;
   const r = await fetch(url);
@@ -39,7 +43,7 @@ async function _osrmBike(from, to) {
   return {
     points: route.geometry.coordinates.map(c => [c[1], c[0]]),
     distanceM: route.distance,
-    durationS: route.duration,
+    durationS: route.distance / OSRM_BIKE_SPEED_MS,
     instructions: steps.map(s => ({
       text: [s.maneuver?.type, s.name].filter(Boolean).join(' '),
       distance: s.distance
